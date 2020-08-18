@@ -1,12 +1,13 @@
 package myapp
 
 import (
+	"EthSea/config"
 	"fyne.io/fyne"
 )
+
 var (
-	AppInstall fyne.App
+	AppInstall    fyne.App
 	WindowInstall fyne.Window
-	AppSavePath string
-
+	AppSavePath   string
+	AppSetting    *config.AppSetting
 )
-

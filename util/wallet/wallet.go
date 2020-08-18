@@ -85,7 +85,7 @@ func Tranfer(privateKey string, toAddress string, count float64) (string, bool) 
 
 	newTrans := types.NewTransaction(nonce, common.HexToAddress(toAddress), weiMount, gasLimit, gasPrice, data)
 
-	chainID, err := client.NetworkID(context.Background())
+	chainID, err := CurrEthClient.NetworkID(context.Background())
 	if err != nil {
 		fmt.Println("chanid err", err)
 		return "", false

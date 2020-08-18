@@ -2,108 +2,109 @@ package ui
 
 import (
 	"EthSea/config"
-	"EthSea/file"
 	"EthSea/myapp"
-	"fmt"
+	"EthSea/util/storage"
+	"encoding/json"
 	"fyne.io/fyne"
+	"fyne.io/fyne/dialog"
 	"fyne.io/fyne/widget"
-    "fyne.io/fyne/dialog"
-	"path/filepath"
 )
 
 const (
-	Width = 480
+	Width  = 480
 	Height = 800
 )
-var fileSaveEdit *widget.Entry
 
-func GetIndexLayout() fyne.CanvasObject{
-	viewSize := fyne.NewSize(Width,Height)
+var passEdit *widget.Entry
+
+func GetIndexLayout() fyne.CanvasObject {
+	viewSize := fyne.NewSize(Width, Height)
 
 	welcomeLabel := widget.NewLabel("Welcome to Eth Sea Wallet!")
 
-	versionLabel := widget.NewLabel("Make by "+config.AppAuthor+" V "+config.AppVersion)
+	versionLabel := widget.NewLabel("Make by " + config.AppAuthor + " V " + config.AppVersion)
 
-	fileSaveEdit =widget.NewEntry()
+	passEdit = widget.NewEntry()
 
-	fileSaveEdit.SetText("/Users/pza/Documents/ethsea")
+	passEdit.SetPlaceHolder("please input your password")
 
-	fileSaveEdit.SetPlaceHolder("please input the path of wallet's data")
+	passEdit.Resize(passEdit.MinSize().Add(fyne.NewSize(100, 0)))
 
-	fileSaveEdit.Resize(fileSaveEdit.MinSize().Add(fyne.NewSize(100,0)))
+	startBt := widget.NewButton("Get Start", startBtClick)
 
-	startBt := widget.NewButton("Get Start",startBtClick)
-
-	startBt.Resize(startBt.MinSize().Add(fyne.NewSize(200,0)))
+	startBt.Resize(startBt.MinSize().Add(fyne.NewSize(200, 0)))
 	welcomeLabel.Resize(welcomeLabel.MinSize())
 	versionLabel.Resize(versionLabel.MinSize())
 
-	SetWidgetHCenter(startBt,viewSize)
+	SetWidgetHCenter(startBt, viewSize)
 
-	SetWidgetHCenter(welcomeLabel,viewSize)
+	SetWidgetHCenter(welcomeLabel, viewSize)
 
-	SetWidgetHCenter(versionLabel,viewSize)
+	SetWidgetHCenter(versionLabel, viewSize)
 
-	SetWidgetHCenter(fileSaveEdit,viewSize)
+	SetWidgetHCenter(passEdit, viewSize)
 
+	SetWidgetY(passEdit, 400)
 
-	SetWidgetY(fileSaveEdit,400)
+	SetWidgetY(startBt, 500)
 
-	SetWidgetY(startBt,500)
+	SetWidgetY(welcomeLabel, 260)
 
-	SetWidgetY(welcomeLabel,260)
+	SetWidgetY(versionLabel, 600)
 
-	SetWidgetY(versionLabel,600)
-
-	lay := fyne.NewContainerWithLayout (&AbLayout{Width,Height}, welcomeLabel,startBt,fileSaveEdit,versionLabel)
-
+	lay := fyne.NewContainerWithLayout(&AbLayout{Width, Height}, welcomeLabel, startBt, passEdit, versionLabel)
 
 	return lay
 
-
 }
-func startBtClick(){
+func startBtClick() {
 
-	savePath := fileSaveEdit.Text
+	password := passEdit.Text
 
-	fmt.Println(savePath)
+	if len(password) < 6 {
 
-	if len(savePath) <= 0 {
-
-		dialog.ShowInformation("Tips","please input the folder path of wallet's data",myapp.WindowInstall)
+		dialog.ShowInformation("Tips", "Password length is at least six digits", myapp.WindowInstall)
 
 		return
 
 	}
 
-	if file.PathExists(savePath) {
+	settingStr := storage.GetItem(config.AppSaveFileName)
 
-		myapp.AppSavePath = savePath
+	var appSetting *config.AppSetting
 
-	} else {
-		dialog.ShowInformation("Tips","The folder path does not exist",myapp.WindowInstall)
+	if len(settingStr) <= 0 {
+		appSetting = new(config.AppSetting)
 
-		return
-	}
+		appSetting.PassWord = "" + password
 
-	settingPath := filepath.Join(savePath,config.AppSaveFileName)
+		setByte, _ := json.Marshal(appSetting)
 
-	fmt.Println(settingPath)
+		isOk := storage.SetItem(config.AppSaveFileName, string(setByte))
 
-	if !file.PathExists(settingPath) {
-		isCre := file.CreateFile(settingPath,true)
-
-		if !isCre {
-			dialog.ShowInformation("Tips","System error",myapp.WindowInstall)
-
+		if !isOk {
+			dialog.ShowInformation("Tips", "System error", myapp.WindowInstall)
 			return
 		}
+
+	} else {
+
+		appSetting = new(config.AppSetting)
+		err := json.Unmarshal([]byte(settingStr), appSetting)
+
+		if err != nil {
+			dialog.ShowInformation("Tips", "System error", myapp.WindowInstall)
+			return
+		}
+		if appSetting.PassWord != password {
+			dialog.ShowInformation("Tips", "The password is incorrect", myapp.WindowInstall)
+			return
+		}
+
 	}
 
-
-
+	myapp.AppSetting = appSetting
 
 	myapp.WindowInstall.SetContent(GetChooseLayout())
-
 
 }

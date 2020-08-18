@@ -19,7 +19,7 @@ func ReadFileString(path string) (string, error) {
 	res := ""
 
 	f, err := os.Open(path)
-
+	defer f.Close()
 	if err != nil {
 		return "", err
 	}
@@ -48,15 +48,18 @@ func ReadFileString(path string) (string, error) {
 }
 func WriteFileString(path string, content string) error {
 
-	f, err := os.Open(path)
+	CreateFile(path,true)
+
+	f, err := os.OpenFile(path,os.O_RDWR,os.ModePerm)
+
+	defer f.Close()
 
 	if err != nil {
 		return err
 	}
 
-	writer := bufio.NewWriter(f)
+	_, err2 := f.WriteString(content)
 
-	_, err2 := writer.WriteString(content)
 
 	return err2
 
@@ -103,7 +106,7 @@ func RemovePath(path string) bool {
 
 	}
 
-	if fileType == NONE {
+	if fileType == DIR {
 		err := os.RemoveAll(path)
 		return err == nil
 	}
@@ -163,5 +166,12 @@ func CreateFile(filePath string, isCover bool) bool {
 		return false
 	}
 	return true
+
+}
+func CreateDir(filePath string) bool {
+
+	err := os.MkdirAll(filePath,0777)
+
+	return  err==nil
 
 }
