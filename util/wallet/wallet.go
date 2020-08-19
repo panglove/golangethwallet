@@ -20,7 +20,7 @@ func GetBalance(address string) float64 {
 	if err != nil {
 		return 0
 	}
-	return mathutil.WeiToFloat(b)
+	return mathutil.ParseFloat(mathutil.WeiToFloat(b),2)
 
 }
 

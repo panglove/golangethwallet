@@ -2,26 +2,28 @@ package myapp
 
 import (
 	"YourMoney/config"
+	"YourMoney/util/mathutil"
+	"YourMoney/util/wallet"
 	"strings"
 )
 
 func GetWalletListString() []string {
 
-	var walletStringList []string
+	var walletIStringList []string
 
-	for _, wallet := range AppSetting.WalletList {
+	for _, walletI := range AppSetting.WalletList {
 
-		walletStringList = append(walletStringList, wallet.Name+":"+wallet.Address)
+		walletIStringList = append(walletIStringList, walletI.Name+":"+walletI.Address+"("+mathutil.FloatToString(wallet.GetBalance(walletI.Address))+")")
 
 	}
-	return walletStringList
+	return walletIStringList
 }
 
 func IsAddressExists(address string) bool {
 
-	for _, wallet := range AppSetting.WalletList {
+	for _, walletI := range AppSetting.WalletList {
 
-		if strings.ToLower(address) == strings.ToLower(wallet.Address) {
+		if strings.ToLower(address) == strings.ToLower(walletI.Address) {
 
 			return true
 		}
@@ -31,21 +33,25 @@ func IsAddressExists(address string) bool {
 }
 
 func GetWalletByAddress(address string) *config.Wallet {
-	for _, wallet := range AppSetting.WalletList {
+	for _, walletI := range AppSetting.WalletList {
 
-		if strings.ToLower(address) == strings.ToLower(wallet.Address) {
+		if strings.ToLower(address) == strings.ToLower(walletI.Address) {
 
-			return &wallet
+			return &walletI
 		}
 
 	}
 	return nil
 }
-func GetWalletByWalletString(wallet string) *config.Wallet {
+func GetWalletByWalletString(walletI string) *config.Wallet {
 
-	walletInfo := strings.Split(wallet, ":")
+	walletIInfo := strings.Split(walletI, ":")
 
-	return GetWalletByAddress(walletInfo[1])
+	conIndex := strings.Index(walletIInfo[1], "(")
+
+	walletIInfoStr := walletIInfo[1][:conIndex]
+
+	return GetWalletByAddress(walletIInfoStr)
 
 }
 

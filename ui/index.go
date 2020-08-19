@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	Width  = 480
+	Width  = 580
 	Height = 800
 )
 
@@ -32,7 +32,7 @@ func GetIndexLayout() fyne.CanvasObject {
 
 	passEdit.SetPlaceHolder("please input your password")
 
-	passEdit.Resize(fyne.NewSize(450, passEdit.MinSize().Height))
+	passEdit.Resize(fyne.NewSize(470, passEdit.MinSize().Height))
 
 	startBt := widget.NewButton("Get Start", startBtClick)
 
@@ -61,7 +61,7 @@ func GetIndexLayout() fyne.CanvasObject {
 
 	currLabel.Resize(currLabel.MinSize())
 
-	SetWidgetPosition(currLabel, 13, 250)
+	SetWidgetPosition(currLabel, 53, 250)
 
 	rpcSelect = widget.NewSelect(myapp.AppSetting.RpcList, rpcSelectChange)
 
@@ -73,11 +73,11 @@ func GetIndexLayout() fyne.CanvasObject {
 	rpcSelect.Resize((fyne.NewSize(400, rpcSelect.MinSize().Height)))
 
 	SetWidgetHCenter(rpcSelect, viewSize)
-	SetWidgetPosition(rpcSelect, 16, 280)
+	SetWidgetPosition(rpcSelect, 56, 280)
 	addBt := widget.NewButton("Add", addBtClick)
 	addBt.Resize(addBt.MinSize().Add(fyne.NewSize(0, 0)))
 	SetWidgetHCenter(addBt, viewSize)
-	SetWidgetPosition(addBt, 425, 280)
+	SetWidgetPosition(addBt, 475, 280)
 
 	lay := fyne.NewContainerWithLayout(&AbLayout{Width, Height}, welcomeLabel, startBt, addBt, passEdit, versionLabel, rpcSelect, currLabel)
 

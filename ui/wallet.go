@@ -14,6 +14,8 @@ import (
 var selectWallet *config.Wallet
 var banlanceLabel *widget.Label
 
+var addressSelect *widget.Select
+
 func GetWalletLayout() fyne.CanvasObject {
 
 	viewSize := fyne.NewSize(Width, Height)
@@ -36,13 +38,13 @@ func GetWalletLayout() fyne.CanvasObject {
 	currLabel.Resize(currLabel.MinSize())
 
 	SetWidgetPosition(currLabel, 13, 90)
-	addressSelect := widget.NewSelect(walletList, AddressSelectChange)
+	addressSelect = widget.NewSelect(walletList, AddressSelectChange)
 
 	//	addressSelect.PlaceHolder ="Select One Wallet"
 
 	addressSelect.SetSelected(walletList[0])
 
-	addressSelect.Resize((fyne.NewSize(450, addressSelect.MinSize().Height)))
+	addressSelect.Resize((fyne.NewSize(550, addressSelect.MinSize().Height)))
 
 	SetWidgetHCenter(addressSelect, viewSize)
 
@@ -60,18 +62,18 @@ func GetWalletLayout() fyne.CanvasObject {
 
 	transferBt := widget.NewButton("Go To Transfer", goToTransferBtClick)
 
-	transferBt.Resize((fyne.NewSize(450, transferBt.MinSize().Height)))
+	transferBt.Resize((fyne.NewSize(550, transferBt.MinSize().Height)))
 
 	SetWidgetHCenter(transferBt, viewSize)
 	SetWidgetY(transferBt, 170)
 
 	createAccountBt := widget.NewButton("Create A Wallet", goToChooseBtClick)
-	createAccountBt.Resize((fyne.NewSize(450, createAccountBt.MinSize().Height)))
+	createAccountBt.Resize((fyne.NewSize(550, createAccountBt.MinSize().Height)))
 	SetWidgetHCenter(createAccountBt, viewSize)
 	SetWidgetY(createAccountBt, 220)
 
 	copyBt := widget.NewButton("Copy Wallet", copyAddressBtClick)
-	copyBt.Resize((fyne.NewSize(450, copyBt.MinSize().Height)))
+	copyBt.Resize((fyne.NewSize(550, copyBt.MinSize().Height)))
 	SetWidgetHCenter(copyBt, viewSize)
 	SetWidgetY(copyBt, 270)
 
@@ -82,7 +84,7 @@ func GetWalletLayout() fyne.CanvasObject {
 
 	SetWidgetY(welcomeLabel, 10)
 
-	lay := fyne.NewContainerWithLayout(&AbLayout{Width, Height}, welcomeLabel, banlanceLabel, transferBt, createAccountBt,copyBt, addressSelect, currLabel)
+	lay := fyne.NewContainerWithLayout(&AbLayout{viewSize.Width, viewSize.Height}, welcomeLabel, banlanceLabel, transferBt, createAccountBt,copyBt, addressSelect, currLabel)
 
 	IntervalLoadBalance()
 
@@ -92,8 +94,9 @@ func GetWalletLayout() fyne.CanvasObject {
 func IntervalLoadBalance() {
 	go func() {
 		for {
-
 			loadBalanceLabel()
+
+			addressSelect.Options = myapp.GetWalletListString()
 
 			time.Sleep(5*time.Second)
 
@@ -102,8 +105,10 @@ func IntervalLoadBalance() {
 }
 
 func loadBalanceLabel() {
+	if selectWallet!=nil {
+		banlanceLabel.SetText("Current Balance:" + mathutil.FloatToString(wallet.GetBalance(selectWallet.Address)))
 
-	banlanceLabel.SetText("Current Balance:" + mathutil.FloatToString(wallet.GetBalance(selectWallet.Address)))
+	}
 
 }
 
@@ -111,9 +116,13 @@ func AddressSelectChange(walletString string) {
 
 	selectWallet = myapp.GetWalletByWalletString(walletString)
 
-	SetSelectWallet(selectWallet)
+	if selectWallet!=nil {
 
-	loadBalanceLabel()
+		SetSelectWallet(selectWallet)
+
+		loadBalanceLabel()
+	}
+
 
 }
 func goToTransferBtClick() {

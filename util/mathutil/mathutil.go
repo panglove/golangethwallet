@@ -64,6 +64,14 @@ func GetFloatDecimal(f float64) int {
 	return endCount
 
 }
+func ParseFloat(f float64,n int) float64 {
+
+	fStr := strconv.FormatFloat(f, 'f', n, 64)
+
+
+	return StringToFloat(fStr)
+
+}
 
 func GetFloatStrDecimal(f_str string) (headCount int, endCount int) {
 
