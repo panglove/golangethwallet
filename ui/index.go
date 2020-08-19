@@ -1,10 +1,10 @@
 package ui
 
 import (
-	"EthSea/config"
-	"EthSea/myapp"
-	"EthSea/util/storage"
-	"encoding/json"
+	"YourMoney/config"
+	"YourMoney/myapp"
+	"YourMoney/util/storage"
+	"YourMoney/util/wallet"
 	"fyne.io/fyne"
 	"fyne.io/fyne/dialog"
 	"fyne.io/fyne/widget"
@@ -17,6 +17,10 @@ const (
 
 var passEdit *widget.Entry
 
+var addRpcDialog dialog.Dialog
+
+var rpcSelect *widget.Select
+
 func GetIndexLayout() fyne.CanvasObject {
 	viewSize := fyne.NewSize(Width, Height)
 
@@ -24,19 +28,20 @@ func GetIndexLayout() fyne.CanvasObject {
 
 	versionLabel := widget.NewLabel("Make by " + config.AppAuthor + " V " + config.AppVersion)
 
-	passEdit = widget.NewEntry()
+	passEdit = widget.NewPasswordEntry()
 
 	passEdit.SetPlaceHolder("please input your password")
 
-	passEdit.Resize(passEdit.MinSize().Add(fyne.NewSize(100, 0)))
+	passEdit.Resize(fyne.NewSize(450, passEdit.MinSize().Height))
 
 	startBt := widget.NewButton("Get Start", startBtClick)
 
 	startBt.Resize(startBt.MinSize().Add(fyne.NewSize(200, 0)))
+	SetWidgetHCenter(startBt, viewSize)
+	SetWidgetY(startBt, 500)
+
 	welcomeLabel.Resize(welcomeLabel.MinSize())
 	versionLabel.Resize(versionLabel.MinSize())
-
-	SetWidgetHCenter(startBt, viewSize)
 
 	SetWidgetHCenter(welcomeLabel, viewSize)
 
@@ -46,17 +51,60 @@ func GetIndexLayout() fyne.CanvasObject {
 
 	SetWidgetY(passEdit, 400)
 
-	SetWidgetY(startBt, 500)
-
-	SetWidgetY(welcomeLabel, 260)
+	SetWidgetY(welcomeLabel, 60)
 
 	SetWidgetY(versionLabel, 600)
 
-	lay := fyne.NewContainerWithLayout(&AbLayout{Width, Height}, welcomeLabel, startBt, passEdit, versionLabel)
+	//RPC List
+
+	currLabel := widget.NewLabel("Current Rpc Url:")
+
+	currLabel.Resize(currLabel.MinSize())
+
+	SetWidgetPosition(currLabel, 13, 250)
+
+	rpcSelect = widget.NewSelect(myapp.AppSetting.RpcList, rpcSelectChange)
+
+	//	rpcSelect.PlaceHolder ="Select One Wallet"
+	if len(myapp.AppSetting.RpcList) > 0 {
+		rpcSelect.SetSelected(myapp.AppSetting.RpcUrl)
+	}
+
+	rpcSelect.Resize((fyne.NewSize(400, rpcSelect.MinSize().Height)))
+
+	SetWidgetHCenter(rpcSelect, viewSize)
+	SetWidgetPosition(rpcSelect, 16, 280)
+	addBt := widget.NewButton("Add", addBtClick)
+	addBt.Resize(addBt.MinSize().Add(fyne.NewSize(0, 0)))
+	SetWidgetHCenter(addBt, viewSize)
+	SetWidgetPosition(addBt, 425, 280)
+
+	lay := fyne.NewContainerWithLayout(&AbLayout{Width, Height}, welcomeLabel, startBt, addBt, passEdit, versionLabel, rpcSelect, currLabel)
 
 	return lay
 
 }
+func addBtClick() {
+	if addRpcDialog == nil {
+		addRpcDialog = dialog.NewCustom("Add Rpc", "Close", GetAddRpcDialogLayout(), myapp.WindowInstall)
+	}
+	addRpcDialog.Show()
+
+}
+func finishAddRpc() {
+	myapp.ReadSetting()
+	rpcSelect.Options = myapp.AppSetting.RpcList
+	rpcSelect.Refresh()
+	if len(myapp.AppSetting.RpcList) > 0 && len(rpcSelect.Selected) == 0 {
+		rpcSelect.SetSelected(myapp.AppSetting.RpcList[0])
+	}
+	addRpcDialog.Hide()
+}
+func rpcSelectChange(s string) {
+	myapp.AppSetting.RpcUrl = s
+	myapp.WriteSetting()
+}
+
 func startBtClick() {
 
 	password := passEdit.Text
@@ -71,16 +119,11 @@ func startBtClick() {
 
 	settingStr := storage.GetItem(config.AppSaveFileName)
 
-	var appSetting *config.AppSetting
+	if len(settingStr) <= 0 || len(myapp.AppSetting.PassWord) <= 0 {
 
-	if len(settingStr) <= 0 {
-		appSetting = new(config.AppSetting)
+		myapp.AppSetting.PassWord = "" + password
 
-		appSetting.PassWord = "" + password
-
-		setByte, _ := json.Marshal(appSetting)
-
-		isOk := storage.SetItem(config.AppSaveFileName, string(setByte))
+		isOk := myapp.WriteSetting()
 
 		if !isOk {
 			dialog.ShowInformation("Tips", "System error", myapp.WindowInstall)
@@ -89,22 +132,36 @@ func startBtClick() {
 
 	} else {
 
-		appSetting = new(config.AppSetting)
-		err := json.Unmarshal([]byte(settingStr), appSetting)
+		isok := myapp.ReadSetting()
 
-		if err != nil {
+		if !isok {
 			dialog.ShowInformation("Tips", "System error", myapp.WindowInstall)
 			return
 		}
-		if appSetting.PassWord != password {
+		if len(myapp.AppSetting.PassWord) > 0 && myapp.AppSetting.PassWord != password {
 			dialog.ShowInformation("Tips", "The password is incorrect", myapp.WindowInstall)
 			return
 		}
 
 	}
 
-	myapp.AppSetting = appSetting
+	isConnect := wallet.Init(myapp.AppSetting.RpcUrl)
 
-	myapp.WindowInstall.SetContent(GetChooseLayout())
+	if !isConnect {
+		Comfirm("Rpc Network Error", func() {
+
+			myapp.AppInstall.Quit()
+		})
+
+	}
+
+	if len(myapp.AppSetting.WalletList) == 0 {
+
+		myapp.WindowInstall.SetContent(GetChooseLayout())
+
+	} else {
+
+		myapp.WindowInstall.SetContent(GetWalletLayout())
+	}
 
 }

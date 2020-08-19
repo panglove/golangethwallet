@@ -7,6 +7,38 @@ import (
 	"strings"
 )
 
+var Wei18 =big.NewInt(int64(math.Pow10(18)))
+
+func FloatToString(f float64) string {
+
+	fStr := strconv.FormatFloat(f, 'f', -1, 64)
+
+	return fStr
+
+}
+
+func StringToFloat(f string) float64 {
+
+	n, err := strconv.ParseFloat(f, 64)
+
+	if err != nil {
+		return 0
+	}
+	return n
+
+}
+
+func WeiToFloat(w *big.Int) float64 {
+
+	re :=new(big.Rat).Quo(new(big.Rat).SetInt(w),new(big.Rat).SetInt(Wei18))
+
+	fe,_ := re.Float64()
+
+
+	return fe
+
+}
+
 func FloatToWei(f float64) (w *big.Int) {
 
 	weiCount := 18
@@ -15,12 +47,11 @@ func FloatToWei(f float64) (w *big.Int) {
 
 	powCount := weiCount - decimal
 
-	fBigInt := big.NewInt(int64(math.Pow(10, float64(decimal)) * f) )
+	fBigInt := big.NewInt(int64(math.Pow(10, float64(decimal)) * f))
 
 	hBigInt := big.NewInt(int64(math.Pow(10, float64(powCount))))
 
-
-	return fBigInt.Mul(fBigInt,hBigInt)
+	return fBigInt.Mul(fBigInt, hBigInt)
 
 }
 

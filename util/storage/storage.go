@@ -1,8 +1,8 @@
 package storage
 
 import (
-	"EthSea/file"
-	"EthSea/util/des"
+	"YourMoney/file"
+	"YourMoney/util/des"
 )
 
 const StoreDir = "./data/"

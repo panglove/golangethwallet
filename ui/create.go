@@ -1,51 +1,80 @@
 package ui
 
 import (
-	"EthSea/myapp"
+	"YourMoney/myapp"
+	"YourMoney/util/wallet"
 	"fyne.io/fyne"
 	"fyne.io/fyne/widget"
 )
 
+var nameEdit *widget.Entry
 
-func GetCreateLayout() fyne.CanvasObject{
-	viewSize := fyne.NewSize(Width,Height)
+func GetCreateLayout() fyne.CanvasObject {
+	viewSize := fyne.NewSize(Width, Height)
 
-	inputTip := widget.NewLabel("Input your password!")
+	inputTip := widget.NewLabel("Input Wallet Name!")
 
-	passEdit := widget.NewEntry()
-	passEdit.SetPlaceHolder("your your password")
+	nameEdit = widget.NewEntry()
+	nameEdit.SetPlaceHolder("Your Wallet Name")
 
+	createBt := widget.NewButton("Create", comfirmCreateBtClick)
 
-	createBt := widget.NewButton("Create",comfirCreateBtClick)
+	createBt.Resize(createBt.MinSize().Add(fyne.NewSize(200, 0)))
 
-	createBt.Resize(createBt.MinSize().Add(fyne.NewSize(200,0)))
+	SetWidgetHCenter(createBt, viewSize)
+	SetWidgetY(createBt, 600)
+
+	backToBt := widget.NewButton("Back", func() {
+
+		myapp.WindowInstall.SetContent(GetChooseLayout())
+	})
+
+	backToBt.Resize(backToBt.MinSize().Add(fyne.NewSize(217, 0)))
+
+	SetWidgetHCenter(backToBt, viewSize)
+	SetWidgetY(backToBt, 700)
 
 	inputTip.Resize(inputTip.MinSize())
 
-	passEdit.Resize(passEdit.MinSize().Add(fyne.NewSize(200,0)))
+	nameEdit.Resize(nameEdit.MinSize().Add(fyne.NewSize(200, 0)))
 
-	SetWidgetHCenter(createBt,viewSize)
+	SetWidgetHCenter(inputTip, viewSize)
+	SetWidgetHCenter(nameEdit, viewSize)
 
-	SetWidgetHCenter(inputTip,viewSize)
-	SetWidgetHCenter(passEdit,viewSize)
+	SetWidgetY(nameEdit, 400)
 
-	SetWidgetY(passEdit,400)
+	SetWidgetY(inputTip, 300)
 
-	SetWidgetY(inputTip,300)
-
-	SetWidgetY(createBt,600)
-
-
-
-
-	lay := fyne.NewContainerWithLayout (&AbLayout{Width,Height}, inputTip,passEdit,createBt)
+	lay := fyne.NewContainerWithLayout(&AbLayout{Width, Height}, inputTip, nameEdit, backToBt, createBt)
 
 	return lay
 
-
 }
-func comfirCreateBtClick(){
-	myapp.WindowInstall.SetContent(GetChooseLayout())
+func comfirmCreateBtClick() {
 
+	nameStr := nameEdit.Text
+
+	if len(nameStr) <= 0 {
+
+		Alert("Wallet name is at least one digits")
+		return
+	}
+	priKey, pubKey := wallet.CreateWallet()
+
+	if len(priKey) <= 0 {
+
+		Alert("System Error")
+		return
+	}
+
+	isok, err := myapp.ImportWallet(nameStr, priKey, pubKey)
+
+	if !isok {
+		Alert(err)
+		return
+	}
+	Comfirm(pubKey+"\n Create Success!", func() {
+		myapp.WindowInstall.SetContent(GetWalletLayout())
+	})
 
 }

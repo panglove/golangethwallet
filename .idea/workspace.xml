@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="12e85933-c952-464c-ab13-cf3030d84a86" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/config/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/file/file.go" beforeDir="false" afterPath="$PROJECT_DIR$/file/file.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myapp/myapp.go" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/myapp.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/index.go" beforeDir="false" afterPath="$PROJECT_DIR$/ui/index.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util/wallet/wallet.go" beforeDir="false" afterPath="$PROJECT_DIR$/util/wallet/wallet.go" afterDir="false" />
-    </list>
+    <list default="true" id="12e85933-c952-464c-ab13-cf3030d84a86" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -52,14 +41,38 @@
     <property name="settings.editor.selected.configurable" value="go.vgo" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/ui" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/myapp" />
       <recent name="$PROJECT_DIR$/ui" />
       <recent name="$PROJECT_DIR$/util/wallet" />
       <recent name="$PROJECT_DIR$/util" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/ui" />
-    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="YourMoney" />
+      <working_directory value="$PROJECT_DIR$/" />
+      <go_parameters value="-i" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/" />
+      <package value="EthSea" />
+      <directory value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
+      <module name="YourMoney" />
+      <working_directory value="$PROJECT_DIR$/" />
+      <go_parameters value="-i" />
+      <framework value="gotest" />
+      <kind value="DIRECTORY" />
+      <package value="EthSea" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -81,9 +94,13 @@
       <screen x="0" y="23" width="1920" height="982" />
     </state>
     <state x="274" y="179" key="SettingsEditor/0.23.1920.982@0.23.1920.982" timestamp="1597313452978" />
-    <state x="1081" y="272" width="670" height="676" key="search.everywhere.popup" timestamp="1597312834878">
+    <state x="565" y="245" width="790" height="538" key="find.popup" timestamp="1597818570179">
       <screen x="0" y="23" width="1920" height="982" />
     </state>
-    <state x="1081" y="272" width="670" height="676" key="search.everywhere.popup/0.23.1920.982@0.23.1920.982" timestamp="1597312834878" />
+    <state x="565" y="245" width="790" height="538" key="find.popup/0.23.1920.982@0.23.1920.982" timestamp="1597818570179" />
+    <state x="1081" y="272" width="670" height="676" key="search.everywhere.popup" timestamp="1597816564053">
+      <screen x="0" y="23" width="1920" height="982" />
+    </state>
+    <state x="1081" y="272" width="670" height="676" key="search.everywhere.popup/0.23.1920.982@0.23.1920.982" timestamp="1597816564053" />
   </component>
 </project>

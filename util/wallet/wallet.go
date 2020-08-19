@@ -1,7 +1,7 @@
 package wallet
 
 import (
-	"EthSea/util/mathutil"
+	"YourMoney/util/mathutil"
 	"context"
 	"crypto/ecdsa"
 	"fmt"
@@ -11,9 +11,18 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-var CurrWallet string
-
 var CurrEthClient *ethclient.Client
+
+func GetBalance(address string) float64 {
+
+	b, err := CurrEthClient.BalanceAt(context.Background(), common.HexToAddress(address), nil)
+
+	if err != nil {
+		return 0
+	}
+	return mathutil.WeiToFloat(b)
+
+}
 
 func Init(rpUrl string) bool {
 	var err error
@@ -66,18 +75,18 @@ func Tranfer(privateKey string, toAddress string, count float64) (string, bool) 
 	nonce, err := CurrEthClient.PendingNonceAt(context.Background(), common.HexToAddress(publicAddress))
 
 	if err != nil {
-
+		fmt.Println("err", err)
 		return "", false
 	}
 
 	weiMount := mathutil.FloatToWei(count)
 
-	gasLimit := uint64(21000)
+	gasLimit := uint64(8000000)
 
 	gasPrice, err2 := CurrEthClient.SuggestGasPrice(context.Background())
 
 	if err2 != nil {
-
+		fmt.Println("err", err2)
 		return "", false
 	}
 
@@ -96,30 +105,32 @@ func Tranfer(privateKey string, toAddress string, count float64) (string, bool) 
 	signTx, err := types.SignTx(newTrans, signer, priviteKey)
 
 	if err != nil {
-		fmt.Println("chanid err", err)
+		fmt.Println("sign err", err)
 		return "", false
 	}
 
 	errTrans := CurrEthClient.SendTransaction(context.Background(), signTx)
 
 	if errTrans != nil {
+		fmt.Println("err", errTrans)
 
 		return "", false
 	}
 	return signTx.Hash().String(), true
 }
 
-func ReadWalletList() {
+func CreateWallet() (pri string, pub string) {
 
-}
+	prig, err := crypto.GenerateKey()
 
-func ImportWalletFromPrivateKey(key string) {
+	if err != nil {
+		return "", ""
+	}
 
-}
+	pri = common.Bytes2Hex(crypto.FromECDSA(prig))
 
-func CreateWallet() {
+	pub, _ = PrivateKeyToPublicHex(pri)
 
-}
-func SetCurrWallet(address string) {
+	return pri, pub
 
 }

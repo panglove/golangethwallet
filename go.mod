@@ -1,4 +1,4 @@
-module EthSea
+module YourMoney
 
 go 1.14
 
