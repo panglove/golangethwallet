@@ -20,7 +20,7 @@ func GetWalletLayout() fyne.CanvasObject {
 
 	viewSize := fyne.NewSize(Width, Height)
 
-	welcomeLabel := widget.NewLabel("Welcome to Eth Sea Wallet!")
+	welcomeLabel := widget.NewLabel("Welcome to Your Money Wallet!")
 
 
 
