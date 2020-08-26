@@ -72,3 +72,16 @@ func ImportWallet(name string, pri string, pub string) (bool, string) {
 	}
 	return true, ""
 }
+func ExportWalletPriviteKey(address string) string {
+
+	eWallet := GetWalletByAddress(address)
+
+	if eWallet != nil {
+
+		return eWallet.PrivateKey
+
+	} else
+	{
+		return ""
+	}
+}

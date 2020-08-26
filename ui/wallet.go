@@ -77,6 +77,12 @@ func GetWalletLayout() fyne.CanvasObject {
 	SetWidgetHCenter(copyBt, viewSize)
 	SetWidgetY(copyBt, 270)
 
+	exportBt := widget.NewButton("Export Wallet", exportBtClick)
+	exportBt.Resize((fyne.NewSize(550, exportBt.MinSize().Height)))
+	SetWidgetHCenter(exportBt, viewSize)
+	SetWidgetY(exportBt, 320)
+
+
 	welcomeLabel.Resize(welcomeLabel.MinSize())
 
 	SetWidgetHCenter(welcomeLabel, viewSize)
@@ -91,6 +97,16 @@ func GetWalletLayout() fyne.CanvasObject {
 	return lay
 
 }
+func exportBtClick(){
+
+	if selectWallet!=nil {
+
+		myapp.WindowInstall.Clipboard().SetContent(""+selectWallet.PrivateKey)
+		Alert("PrivateKey Has Copyed")
+
+	}
+}
+
 func IntervalLoadBalance() {
 	go func() {
 		for {
