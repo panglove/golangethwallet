@@ -17,12 +17,24 @@ func GetChooseLayout() fyne.CanvasObject {
 
 	tip2 := widget.NewLabel("Create A New Wallet!")
 
-	importBt := widget.NewButton("Import Wallet", importBtClick)
+	importBt := widget.NewButton("From PrivateKey", importBtClick)
 
 	createBt := widget.NewButton("Create Wallet", createBtClick)
 	createBt.Resize(fyne.NewSize(400, createBt.MinSize().Height))
 	SetWidgetHCenter(createBt,viewSize)
 	SetWidgetY(createBt,400)
+
+
+	tip0 := widget.NewLabel("Use Keystore File To Import Wallet!")
+	tip0.Resize(tip0.MinSize())
+	SetWidgetHCenter(tip0,viewSize)
+	SetWidgetY(tip0,250)
+	fromFileBt := widget.NewButton("From Keystore", fromKeyStoreBtClick)
+	fromFileBt.Resize(fyne.NewSize(400, fromFileBt.MinSize().Height))
+	SetWidgetHCenter(fromFileBt,viewSize)
+
+	SetWidgetY(fromFileBt,300)
+
 
 
 	backBt = widget.NewButton("Back", backBtClick)
@@ -56,7 +68,7 @@ func GetChooseLayout() fyne.CanvasObject {
 
 	SetWidgetY(importBt,200)
 
-	lay := fyne.NewContainerWithLayout(&AbLayout{Width, Height}, importBt, createBt,backBt,tip1,tip2)
+	lay := fyne.NewContainerWithLayout(&AbLayout{Width, Height}, importBt, createBt,fromFileBt, backBt,tip1,tip2,tip0)
 
 	return lay
 
@@ -67,7 +79,10 @@ func backBtClick(){
 
 
 }
+func fromKeyStoreBtClick() {
+	myapp.WindowInstall.SetContent(GetImportKeyStoreLayout())
 
+}
 func importBtClick() {
 	myapp.WindowInstall.SetContent(GetImportLayout())
 

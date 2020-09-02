@@ -1,10 +1,12 @@
 package wallet
 
 import (
+	"YourMoney/file"
 	"YourMoney/util/mathutil"
 	"context"
 	"crypto/ecdsa"
 	"fmt"
+	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -13,6 +15,40 @@ import (
 
 var CurrEthClient *ethclient.Client
 
+func KeyStoreFileToPrivateKey(filePath string, password string) (string, bool) {
+	keyStr, err := file.ReadFileString(filePath)
+
+	if err != nil {
+		fmt.Println("read keystore err:", err)
+		return "", false
+	}
+	key, err := keystore.DecryptKey([]byte(keyStr), password)
+
+	if err != nil {
+		fmt.Println("keystore password err:", key)
+		return "", false
+	}
+
+	priKeyStr := common.Bytes2Hex(crypto.FromECDSA(key.PrivateKey))
+
+	return priKeyStr,true
+
+}
+func KeyStoreToPrivateKey(keyStr string, password string) (string, bool) {
+
+	key, err := keystore.DecryptKey([]byte(keyStr), password)
+
+	if err != nil {
+		fmt.Println("keystore password err:", key)
+		return "", false
+	}
+
+	priKeyStr := common.Bytes2Hex(crypto.FromECDSA(key.PrivateKey))
+
+	return priKeyStr,true
+
+}
+
 func GetBalance(address string) float64 {
 
 	b, err := CurrEthClient.BalanceAt(context.Background(), common.HexToAddress(address), nil)
@@ -20,7 +56,7 @@ func GetBalance(address string) float64 {
 	if err != nil {
 		return 0
 	}
-	return mathutil.ParseFloat(mathutil.WeiToFloat(b),2)
+	return mathutil.ParseFloat(mathutil.WeiToFloat(b), 2)
 
 }
 

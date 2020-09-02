@@ -90,7 +90,7 @@ func GetWalletLayout() fyne.CanvasObject {
 
 	SetWidgetY(welcomeLabel, 10)
 
-	lay := fyne.NewContainerWithLayout(&AbLayout{viewSize.Width, viewSize.Height}, welcomeLabel, banlanceLabel, transferBt, createAccountBt,copyBt, addressSelect, currLabel)
+	lay := fyne.NewContainerWithLayout(&AbLayout{viewSize.Width, viewSize.Height}, welcomeLabel, banlanceLabel, exportBt,transferBt, createAccountBt,copyBt, addressSelect, currLabel)
 
 	IntervalLoadBalance()
 
