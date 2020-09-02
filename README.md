@@ -59,5 +59,5 @@ fyne package -os windows -icon logo.png
 **4.预览**
 
 
-![image](https://gitee.com/seelove792/GoEthWallet/blob/master/image/5.png)
-![image](https://gitee.com/seelove792/GoEthWallet/blob/master/image/6.png)
+![image](https://gitee.com/seelove792/GoEthWallet/raw/master/image/5.png)
+![image](https://gitee.com/seelove792/GoEthWallet/raw/master/image/6.png)
