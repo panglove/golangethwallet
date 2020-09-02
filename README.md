@@ -53,6 +53,11 @@ fyne package -os darwin -icon logo.png
 fyne package -os linux -icon logo.png
 fyne package -os windows -icon logo.png
 
+
+
+
 **4.预览**
+
+
 ![image](https://github.com/panglove/golangethwallet/blob/master/image/5.png)
 ![image](https://github.com/panglove/golangethwallet/blob/master/image/6.png)
