@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="12e85933-c952-464c-ab13-cf3030d84a86" name="Default Changelist" comment="" />
+    <list default="true" id="12e85933-c952-464c-ab13-cf3030d84a86" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myapp/wallet.go" beforeDir="false" afterPath="$PROJECT_DIR$/myapp/wallet.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/wallet.go" beforeDir="false" afterPath="$PROJECT_DIR$/ui/wallet.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,7 +41,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../YourMoney/data" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="go.vgo" />
   </component>
   <component name="RecentsManager">
@@ -48,7 +52,7 @@
       <recent name="$PROJECT_DIR$/util" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/../YourMoney/data" />
+      <recent name="$PROJECT_DIR$/data" />
       <recent name="$PROJECT_DIR$/ui" />
     </key>
   </component>

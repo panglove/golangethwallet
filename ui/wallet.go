@@ -81,7 +81,10 @@ func GetWalletLayout() fyne.CanvasObject {
 	exportBt.Resize((fyne.NewSize(550, exportBt.MinSize().Height)))
 	SetWidgetHCenter(exportBt, viewSize)
 	SetWidgetY(exportBt, 320)
-
+	removeBt := widget.NewButton("Remove Wallet", removeBtClick)
+	removeBt.Resize((fyne.NewSize(550, removeBt.MinSize().Height)))
+	SetWidgetHCenter(removeBt, viewSize)
+	SetWidgetY(removeBt, 370)
 
 	welcomeLabel.Resize(welcomeLabel.MinSize())
 
@@ -90,7 +93,7 @@ func GetWalletLayout() fyne.CanvasObject {
 
 	SetWidgetY(welcomeLabel, 10)
 
-	lay := fyne.NewContainerWithLayout(&AbLayout{viewSize.Width, viewSize.Height}, welcomeLabel, banlanceLabel, exportBt,transferBt, createAccountBt,copyBt, addressSelect, currLabel)
+	lay := fyne.NewContainerWithLayout(&AbLayout{viewSize.Width, viewSize.Height}, welcomeLabel, banlanceLabel, exportBt,transferBt,removeBt, createAccountBt,copyBt, addressSelect, currLabel)
 
 	IntervalLoadBalance()
 
@@ -106,7 +109,15 @@ func exportBtClick(){
 
 	}
 }
+func removeBtClick(){
 
+	if selectWallet!=nil {
+		myapp.RemoveWallet(selectWallet.Address)
+		myapp.WindowInstall.SetContent(GetWalletLayout())
+		Alert("Remove Success")
+
+	}
+}
 func IntervalLoadBalance() {
 	go func() {
 		for {

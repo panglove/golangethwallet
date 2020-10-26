@@ -54,7 +54,24 @@ func GetWalletByWalletString(walletI string) *config.Wallet {
 	return GetWalletByAddress(walletIInfoStr)
 
 }
+func RemoveWallet(address string) bool {
 
+	for index, walletI := range AppSetting.WalletList {
+
+		if strings.ToLower(address) == strings.ToLower(walletI.Address) {
+
+			AppSetting.WalletList = append(AppSetting.WalletList[:index], AppSetting.WalletList[index+1:]...)
+			break
+		}
+
+	}
+	isok := WriteSetting()
+
+	if !isok {
+		return false
+	}
+	return true
+}
 func ImportWallet(name string, pri string, pub string) (bool, string) {
 
 	if IsAddressExists(pub) {
